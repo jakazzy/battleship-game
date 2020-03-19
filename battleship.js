@@ -27,3 +27,11 @@ const gameName =
                                                                             | $$      
                                                                             |__/ `
 
+// create the board
+const board = []
+const createBoard = (board, size)=>{
+    let row ='[O] '.repeat(size)
+    for( let i= 0; i< size; i++)
+    board.push(row)
+    console.log(board.join('\n'))
+}
