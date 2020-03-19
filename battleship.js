@@ -32,14 +32,14 @@ const board = []
 const createBoard = (board, size)=>{
     let row ='[O] '.repeat(size)
     for( let i= 0; i< size; i++)
-    board.push(row)
+        board.push(row)
     console.log(board.join('\n'))
 }
 
 // Select Random row
-const randomPosition =()=>{
-    let randomRow = Math.floor(Math.random() * 5) + 1
-    let randomColumn = Math.floor(Math.random() * 5) + 1
+const randomPosition =(size)=>{
+    let randomRow = Math.floor(Math.random() * size) + 1
+    let randomColumn = Math.floor(Math.random() * size) + 1
     console.log(randomRow, randomColumn )
     return [randomRow, randomColumn]
 }
@@ -76,7 +76,6 @@ const AskPosition = (rl, question) => {
 }
 
 const Ask = function(questions) {
-   
     return new Promise(async( resolve, reject) => {
         let rl = readline.createInterface({
             input: process.stdin,
@@ -95,7 +94,7 @@ const Ask = function(questions) {
         else {
             reject(results)
         }
-       
+        
     })
 }
 
@@ -125,7 +124,7 @@ const playGame=async()=>{
     createBoard(board, 5)
     
     for( turns > 0; turns--;){
-        const [randomRow, randomColumn]=randomPosition()
+        const [randomRow, randomColumn]=randomPosition(5)
         const [row, column] = await Ask(questions)
         let newScore = progressMessageAndScore(+row, +column, randomRow, randomColumn, score)
         score = score + newScore
