@@ -111,3 +111,32 @@ const markSelectedPosition =(board, row, column)=>{
     board.splice(+row-1, 1, newRow)
     console.log(board.join('\n'))
 }
+
+const questions= [
+    'What is the row of the ship? ',
+    'What is column of the ship? '
+ ]
+
+
+const playGame=async()=>{
+    let turns=3;
+    let score= 0
+    console.log(gameName)
+    createBoard(board, 5)
+    
+    for( turns > 0; turns--;){
+        const [randomRow, randomColumn]=randomPosition()
+        const [row, column] = await Ask(questions)
+        let newScore = progressMessageAndScore(+row, +column, randomRow, randomColumn, score)
+        score = score + newScore
+        markSelectedPosition(board, +row, +column)
+    }
+    if(turns <0 && score > 0){
+        console.log(`congratulations you scored ${score} ` )
+    }
+    else{
+        console.log(`you scored ${score}, gameOver, you lost ` )
+    }
+    }
+    
+    playGame()
