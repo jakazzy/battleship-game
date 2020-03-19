@@ -45,22 +45,29 @@ const randomPosition =(size)=>{
 }
 
 //  Message to display when player wins / loses a turn
-const progressMessageAndScore =(row, column, randomRow, randomColumn, score)=>{
+const progressMessageAndScore =(row, column, randomRow, randomColumn, playerOneScore, playerTwoScore, turns)=>{
+    console.log( 'scoresinitial: ',playerOneScore ,playerTwoScore)
     if( randomRow=== row && randomColumn=== column){
         console.log('hey you have gained one')
-        score = score + (row * column)
-       return score
+        playerOneScore = turns % 2 ===0 ? playerOneScore + (row * column) : playerOneScore
+        playerTwoScore = turns % 2 ===1 ? playerTwoScore + (row * column) : playerTwoScore
+        console.log( 'scores: ',playerOneScore ,playerTwoScore)
+       return [playerOneScore, playerTwoScore]
     }  
     if( randomRow !== row || randomColumn !== column){
         console.log(row, typeof column)
         console.log('hey you have lost one')
         score = score - (row * column)
-       return score
+        playerOneScore = turns % 2 ===0 ? playerOneScore - (row * column) : playerOneScore
+        playerTwoScore = turns % 2 ===1 ? playerTwoScore - (row * column) : playerTwoScore
+       return [playerOneScore, playerTwoScore]
     }
     if( row > 5 || row < 0 || column > 5 || column < 0){
         console.log('hey you sank dear')
         score = score - (row * column)
-       return score
+        playerOneScore = turns % 2 ===0 ? playerOneScore - (row * column) : playerOneScore
+        playerTwoScore = turns % 2 ===1 ? playerTwoScore - (row * column) : playerTwoScore
+       return [playerOneScore, playerTwoScore]
     }   
 }
 
@@ -101,14 +108,15 @@ const Ask = function(questions) {
 
 const markSelectedPosition =(board, row, column)=>{
     let newRow = board[+row -1].split(" ")
-    if(newRow[+column-1] ==='[X]'){
-        console.log('you have already chosen this previously', board.join('\n'))
-        return
-    }
+    // if(newRow[+column-1] ==='[X]'){
+    //     console.log('you have already chosen this previously', board.join('\n'))
+    //     return
+    // }
     newRow[+column-1] ='[X]'
     newRow = newRow.join(' ')
     board.splice(+row-1, 1, newRow)
     console.log(board.join('\n'))
+    console.log('just to mark')
 }
 
 const questions= [
@@ -118,29 +126,37 @@ const questions= [
 
 
 const playGame=async()=>{
-    let turns=3;
-    let score= 0
+    
+    let playerOneScore= 0
+    let playerTwoScore = 0
+
     console.log(gameName)
     createBoard(board, 5)
     
-    for( turns > 0; turns--;){
+    for(let turns=6; turns > 0; turns--){
+        console.log(turns, 'log turns')
         const [randomRow, randomColumn]=randomPosition(5)
         const [row, column] = await Ask(questions)
-        let newScore = progressMessageAndScore(+row, +column, randomRow, randomColumn, score)
-        score = score + newScore
+        console.log(playerOneScore, playerTwoScore, 'checking')
+        let [oneScore, twoScore] = progressMessageAndScore(+row, +column, randomRow, randomColumn, playerOneScore,playerTwoScore, turns)
+        console.log(oneScore, twoScore, 'monsoso', playerOneScore,playerTwoScore )
+        playerOneScore = turns % 2===0 ? playerOneScore + oneScore : playerOneScore
+        playerTwoScore = turns % 2 === 1 ? playerTwoScore + twoScore : playerTwoScore
+        console.log( 'yenie', playerOneScore,playerTwoScore, turns % 2 ===0, oneScore, twoScore )
+       
         markSelectedPosition(board, +row, +column)
     }
-    if(turns <0 && score > 0){
-        console.log(`congratulations you scored ${score} ` )
+  
+    if(playerOneScore > playerTwoScore){
+        console.log( `Congratulations Player One you are a real champ`)
+    } else{
+        console.log( `Congratulations Player two that was amazing!!!`)
     }
-    else{
-        console.log(`you scored ${score}, gameOver, you lost ` )
-    }
+
+    console.log(gameOver)
     }
     
     playGame()
 
 
-    // Calculate the score
-    // Mkae the code more elegant and meaningful
-    // Make it a two player game
+  
