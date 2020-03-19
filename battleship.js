@@ -98,3 +98,16 @@ const Ask = function(questions) {
        
     })
 }
+
+
+const markSelectedPosition =(board, row, column)=>{
+    let newRow = board[+row -1].split(" ")
+    if(newRow[+column-1] ==='[X]'){
+        console.log('you have already chosen this previously', board.join('\n'))
+        return
+    }
+    newRow[+column-1] ='[X]'
+    newRow = newRow.join(' ')
+    board.splice(+row-1, 1, newRow)
+    console.log(board.join('\n'))
+}
