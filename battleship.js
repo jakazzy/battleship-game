@@ -13,6 +13,17 @@ const gameOver =
                                                                                                                                                                                 
 `
 
+const gameEnd =`
+
+/$$$$$$$$                 /$$                  /$$$$$$         /$$$$$$                                   
+| $$_____/                | $$                 /$$__  $$       /$$__  $$                                  
+| $$       /$$$$$$$   /$$$$$$$        /$$$$$$ | $$  \__/      | $$  \__/  /$$$$$$  /$$$$$$/$$$$   /$$$$$$ 
+| $$$$$   | $$__  $$ /$$__  $$       /$$__  $$| $$$$          | $$ /$$$$ |____  $$| $$_  $$_  $$ /$$__  $$
+| $$__/   | $$  \ $$| $$  | $$      | $$  \ $$| $$_/          | $$|_  $$  /$$$$$$$| $$ \ $$ \ $$| $$$$$$$$
+| $$      | $$  | $$| $$  | $$      | $$  | $$| $$            | $$  \ $$ /$$__  $$| $$ | $$ | $$| $$_____/
+| $$$$$$$$| $$  | $$|  $$$$$$$      |  $$$$$$/| $$            |  $$$$$$/|  $$$$$$$| $$ | $$ | $$|  $$$$$$$
+|________/|__/  |__/ \_______/       \______/ |__/             \______/  \_______/|__/ |__/ |__/ \_______/
+                                                                                                          `
 const gameName =
 ` 
 /$$$$$$$              /$$     /$$     /$$                     /$$       /$$          
@@ -40,22 +51,18 @@ const createBoard = (board, size)=>{
 const randomPosition =(size)=>{
     let randomRow = Math.floor(Math.random() * size) + 1
     let randomColumn = Math.floor(Math.random() * size) + 1
-    console.log(randomRow, randomColumn )
+    console.log(randomRow, randomColumn)
     return [randomRow, randomColumn]
 }
 
 //  Message to display when player wins / loses a turn
 const progressMessageAndScore =(row, column, randomRow, randomColumn, playerOneScore, playerTwoScore, turns)=>{
-    console.log( 'scoresinitial: ',playerOneScore ,playerTwoScore)
     if( randomRow=== row && randomColumn=== column){
-        console.log('hey you have gained one')
         playerOneScore = turns % 2 ===0 ? playerOneScore + (row * column) : playerOneScore
         playerTwoScore = turns % 2 ===1 ? playerTwoScore + (row * column) : playerTwoScore
-        console.log( 'scores: ',playerOneScore ,playerTwoScore)
        return [playerOneScore, playerTwoScore]
     }  
     if( randomRow !== row || randomColumn !== column){
-        console.log(row, typeof column)
         console.log('hey you have lost one')
         score = score - (row * column)
         playerOneScore = turns % 2 ===0 ? playerOneScore - (row * column) : playerOneScore
@@ -108,15 +115,11 @@ const Ask = function(questions) {
 
 const markSelectedPosition =(board, row, column)=>{
     let newRow = board[+row -1].split(" ")
-    // if(newRow[+column-1] ==='[X]'){
-    //     console.log('you have already chosen this previously', board.join('\n'))
-    //     return
-    // }
     newRow[+column-1] ='[X]'
     newRow = newRow.join(' ')
     board.splice(+row-1, 1, newRow)
     console.log(board.join('\n'))
-    console.log('just to mark')
+   
 }
 
 const questions= [
@@ -126,34 +129,31 @@ const questions= [
 
 
 const playGame=async()=>{
-    
+    const fgRed ="\x1b[33m"
+    const fgBlue= "\x1b[34m"
     let playerOneScore= 0
     let playerTwoScore = 0
 
-    console.log(gameName)
+    console.log(fgBlue,gameName)
     createBoard(board, 5)
     
     for(let turns=6; turns > 0; turns--){
-        console.log(turns, 'log turns')
         const [randomRow, randomColumn]=randomPosition(5)
         const [row, column] = await Ask(questions)
-        console.log(playerOneScore, playerTwoScore, 'checking')
         let [oneScore, twoScore] = progressMessageAndScore(+row, +column, randomRow, randomColumn, playerOneScore,playerTwoScore, turns)
-        console.log(oneScore, twoScore, 'monsoso', playerOneScore,playerTwoScore )
         playerOneScore = turns % 2===0 ? playerOneScore + oneScore : playerOneScore
         playerTwoScore = turns % 2 === 1 ? playerTwoScore + twoScore : playerTwoScore
-        console.log( 'yenie', playerOneScore,playerTwoScore, turns % 2 ===0, oneScore, twoScore )
        
         markSelectedPosition(board, +row, +column)
     }
-  
+    
     if(playerOneScore > playerTwoScore){
-        console.log( `Congratulations Player One you are a real champ`)
+        console.log('*'.repeat(100),'\n','\n', fgRed,`Congratulations Player One you are a real champ`,'\n','\n','*'.repeat(100))
     } else{
-        console.log( `Congratulations Player two that was amazing!!!`)
+        console.log('*'.repeat(100),'\n','\n', fgRed,`Congratulations Player two that was amazing!!!`,'\n','\n','*'.repeat(100))
     }
 
-    console.log(gameOver)
+    console.log(fgBlue,gameEnd)
     }
     
     playGame()
