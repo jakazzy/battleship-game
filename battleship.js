@@ -63,3 +63,38 @@ const progressMessageAndScore =(row, column, randomRow, randomColumn, score)=>{
        return score
     }   
 }
+
+// Get input from players
+const readline = require('readline');
+
+const AskPosition = (rl, question) => {
+    return new Promise(resolve => {
+        rl.question(question, (answer) => {
+            resolve(answer);
+        });
+    });
+}
+
+const Ask = function(questions) {
+   
+    return new Promise(async( resolve, reject) => {
+        let rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+
+        let results = [];
+        for(let i=0;i < questions.length;i++) {
+            const result = await AskPosition(rl, questions[i]);
+            results.push(result);
+        }
+        rl.close();
+        if(results){
+        resolve(results)
+        }
+        else {
+            reject(results)
+        }
+       
+    })
+}
