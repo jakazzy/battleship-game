@@ -140,3 +140,8 @@ const playGame=async()=>{
     }
     
     playGame()
+
+
+    // Calculate the score
+    // Mkae the code more elegant and meaningful
+    // Make it a two player game
