@@ -43,3 +43,23 @@ const randomPosition =()=>{
     console.log(randomRow, randomColumn )
     return [randomRow, randomColumn]
 }
+
+//  Message to display when player wins / loses a turn
+const progressMessageAndScore =(row, column, randomRow, randomColumn, score)=>{
+    if( randomRow=== row && randomColumn=== column){
+        console.log('hey you have gained one')
+        score = score + (row * column)
+       return score
+    }  
+    if( randomRow !== row || randomColumn !== column){
+        console.log(row, typeof column)
+        console.log('hey you have lost one')
+        score = score - (row * column)
+       return score
+    }
+    if( row > 5 || row < 0 || column > 5 || column < 0){
+        console.log('hey you sank dear')
+        score = score - (row * column)
+       return score
+    }   
+}
