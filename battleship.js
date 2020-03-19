@@ -35,3 +35,11 @@ const createBoard = (board, size)=>{
     board.push(row)
     console.log(board.join('\n'))
 }
+
+// Select Random row
+const randomPosition =()=>{
+    let randomRow = Math.floor(Math.random() * 5) + 1
+    let randomColumn = Math.floor(Math.random() * 5) + 1
+    console.log(randomRow, randomColumn )
+    return [randomRow, randomColumn]
+}
